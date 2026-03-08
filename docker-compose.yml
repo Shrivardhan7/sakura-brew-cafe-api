@@ -1,0 +1,56 @@
+version: '3.9'
+
+services:
+  # ── MongoDB ────────────────────────────────────────────────────────────────
+  mongo:
+    image: mongo:7-jammy
+    container_name: sakura-mongo
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_DATABASE: sakura-brew-cafe
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - sakura-net
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  # ── API Server ────────────────────────────────────────────────────────────
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: sakura-api
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+      - MONGODB_URI=mongodb://mongo:27017/sakura-brew-cafe
+      - PORT=5000
+    ports:
+      - "5000:5000"
+    depends_on:
+      mongo:
+        condition: service_healthy
+    networks:
+      - sakura-net
+    volumes:
+      # Mount .env for secrets (don't bake secrets into image)
+      - ./.env:/app/.env:ro
+
+# ── Volumes & Networks ────────────────────────────────────────────────────────
+volumes:
+  mongo_data:
+    driver: local
+
+networks:
+  sakura-net:
+    driver: bridge

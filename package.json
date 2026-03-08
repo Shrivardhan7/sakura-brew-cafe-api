@@ -1,0 +1,37 @@
+{
+  "name": "sakura-brew-cafe",
+  "version": "2.0.0",
+  "description": "A Japanese-themed café ordering system REST API",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "seed": "node src/seed/seedData.js",
+    "test": "jest --coverage --forceExit",
+    "test:watch": "jest --watch",
+    "test:ci": "jest --coverage --ci --forceExit"
+  },
+  "keywords": ["cafe", "japanese", "rest-api", "nodejs", "express", "mongodb"],
+  "author": "Sakura Brew Café",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
+    "express-validator": "^7.0.1",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.0.3",
+    "morgan": "^1.10.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "mongodb-memory-server": "^9.1.5",
+    "nodemon": "^3.0.2",
+    "supertest": "^6.3.3"
+  }
+}
